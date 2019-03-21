@@ -6,6 +6,6 @@ authors = [
 "Yuhao Zhou <miskcoo@gmail.com>",
 "Jiajie Chen <noc@jiegec.ac.cn>"
 ]
-edition = "2019"
+edition = "2018"
 
 [dependencies]
