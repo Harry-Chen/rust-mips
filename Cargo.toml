@@ -2,10 +2,16 @@
 name = "mips"
 version = "0.1.0"
 authors = [
-"Shengqi Chen <i@harrychen.xyz>",
-"Yuhao Zhou <miskcoo@gmail.com>",
-"Jiajie Chen <noc@jiegec.ac.cn>"
+    "Shengqi Chen <i@harrychen.xyz>",
+    "Yuhao Zhou <miskcoo@gmail.com>",
+    "Jiajie Chen <noc@jiegec.ac.cn>"
 ]
 edition = "2018"
+repository = "https://github.com/Harry-Chen/rust-mips"
+categories = ["embedded", "hardware-support", "no-std"]
+description = "Low-level abstraction of MIPS processors"
+keywords = ["mips", "register", "interrupt"]
+license = "MIT"
 
 [dependencies]
+
