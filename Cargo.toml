@@ -1,7 +1,11 @@
 [package]
-name = "rust-mips"
+name = "mips"
 version = "0.1.0"
-authors = ["Jiajie Chen <noc@jiegec.ac.cn>"]
-edition = "2018"
+authors = [
+"Shengqi Chen <i@harrychen.xyz>",
+"Yuhao Zhou <miskcoo@gmail.com>",
+"Jiajie Chen <noc@jiegec.ac.cn>"
+]
+edition = "2019"
 
 [dependencies]
