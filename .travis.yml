@@ -1,0 +1,25 @@
+sudo: false
+
+dist: xenial
+
+language: rust
+
+rust: nightly-2019-03-05
+
+os:
+  - linux
+  - osx
+
+cache:
+  cargo: true
+
+env:
+  matrix:
+    - ARCH="mipsel"
+
+before_script:
+  - rustup component add rust-src
+  - (test -x $HOME/.cargo/bin/cargo-xbuild || cargo install cargo-xbuild)
+
+script:
+  - make arch=$ARCH
