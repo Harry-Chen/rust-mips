@@ -1,7 +1,9 @@
 //! MIPS CP0 Cause register
 
+use crate::registers::cp0_traits::*;
+
 #[derive(Clone, Copy, Debug)]
-pub struct CP0cause {
+pub struct CP0Cause {
     bits: usize
 }
 
@@ -88,7 +90,7 @@ impl Exception {
     }
 }
 
-impl CP0cause {
+impl CP0Cause {
     #[inline]
     pub fn bits(&self) -> usize {
         self.bits
@@ -117,11 +119,15 @@ impl CP0cause {
         self.bits = (self.bits & !(0b11 << 8)) | (mark << 8);
     }
 
-    pub unsafe fn read(&mut self) {
-        asm!("mfc0 $0, $$13": "=r"(self.bits));
+    pub unsafe fn read() -> Self {
+        Self { bits: cp0_register_read::<Self>() }
     }
 
-    pub unsafe fn write(&self) {
-        asm!("mtc0 $0, $$13": : "r"(self.bits) : : "volatile");
+    pub unsafe fn write(&mut self) {
+        cp0_register_write::<Self>(self.bits);
     }
+}
+
+impl CP0Register for CP0Cause {
+    const REG_ID : u8 = 13;
 }
