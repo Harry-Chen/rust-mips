@@ -14,4 +14,4 @@ keywords = ["mips", "register", "interrupt"]
 license = "MIT"
 
 [dependencies]
-
+bitflags = "1.*"
