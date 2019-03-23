@@ -128,6 +128,14 @@ impl CP0Cause {
     }
 }
 
+pub unsafe fn read_cp0_cause() -> u32 {
+    cp0_register_read::<CP0Cause>()
+}
+
+pub unsafe fn write_cp0_cause(val: u32) {
+    cp0_register_write::<CP0Cause>(val);
+}
+
 impl CP0Register for CP0Cause {
     const REG_ID : u8 = 13;
 }
