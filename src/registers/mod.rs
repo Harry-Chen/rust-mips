@@ -1,8 +1,8 @@
 
 #[macro_use]
-mod cp0_traits;
+mod cp0_general;
 
 pub mod cp0_cause;
 pub mod cp0_count;
 pub mod cp0_compare;
-pub mod cp0_entrylo;
+pub mod cp0_entry_lo;

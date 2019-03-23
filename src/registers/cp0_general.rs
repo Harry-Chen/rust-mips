@@ -5,7 +5,7 @@ pub trait CP0RegisterTrait {
     const REG_SEL : u8 = 0;
 }
 
-macro_rules! generate_register_info {
+macro_rules! register_basic_operations {
     () => {
         #[inline]
         pub fn bits(&self) -> u32 {
@@ -49,7 +49,7 @@ macro_rules! register_flags {
     };
 }
 
-macro_rules! register_fleld {
+macro_rules! register_field {
     ($getter: ident, $setter: ident, $offset: expr, $size: expr) => {
         pub fn $getter(&self) -> u32 {
             (self.bits >> $offset) & ((1 << $size) - 1)

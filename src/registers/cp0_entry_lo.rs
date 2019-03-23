@@ -1,17 +1,17 @@
 //! MIPS CP0 Count register
 
-use crate::registers::cp0_traits::*;
+use crate::registers::cp0_general::*;
 
 pub trait CP0EntryLoFlags {
     const DIRTY:     u32 = 0b00100;
     const VALID:     u32 = 0b00010;
     const GLOBAL:    u32 = 0b00001;
     const UNCACHED:  u32 = 0b10000;
-    const CACHABLE:  u32 = 0b11000;
+    const CACHEABLE:  u32 = 0b11000;
     const FLAG_MASK: u32 = 0b11111;
 }
 
-macro_rules! generate_entrylo {
+macro_rules! generate_entry_lo {
     ($name: ident, $id: expr) => {
         #[derive(Clone, Copy, Debug)]
         pub struct $name {
@@ -31,5 +31,5 @@ macro_rules! generate_entrylo {
     };
 }
 
-generate_entrylo!(CP0EntryLo0, 2);
-generate_entrylo!(CP0EntryLo1, 3);
+generate_entry_lo!(CP0EntryLo0, 2);
+generate_entry_lo!(CP0EntryLo1, 3);

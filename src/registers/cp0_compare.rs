@@ -1,6 +1,6 @@
 //! MIPS CP0 Compare register
 
-use crate::registers::cp0_traits::*;
+use crate::registers::cp0_general::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Compare {
@@ -12,5 +12,5 @@ impl CP0RegisterTrait for CP0Compare {
 }
 
 impl CP0Compare {
-    generate_register_info!();
+    register_basic_operations!();
 }

@@ -1,6 +1,6 @@
 //! MIPS CP0 Count register
 
-use crate::registers::cp0_traits::*;
+use crate::registers::cp0_general::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Count {
@@ -12,5 +12,5 @@ impl CP0RegisterTrait for CP0Count {
 }
 
 impl CP0Count {
-    generate_register_info!();
+    register_basic_operations!();
 }

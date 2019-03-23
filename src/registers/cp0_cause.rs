@@ -1,6 +1,6 @@
 //! MIPS CP0 Cause register
 
-use crate::registers::cp0_traits::*;
+use crate::registers::cp0_general::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Cause {
@@ -118,5 +118,5 @@ impl CP0Cause {
         self.bits = (self.bits & !(0b11 << 8)) | (mark << 8);
     }
 
-    generate_register_info!();
+    register_basic_operations!();
 }
