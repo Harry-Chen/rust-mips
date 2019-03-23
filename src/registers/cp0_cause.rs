@@ -4,7 +4,7 @@ use crate::registers::cp0_traits::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Cause {
-    bits: usize
+    bits: u32
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -51,7 +51,7 @@ pub enum SoftwareInterrupt {
 }
 
 impl Exception {
-    pub fn from(exccode: usize) -> Self {
+    pub fn from(exccode: u32) -> Self {
         match exccode {
             0 => Exception::Interrupt,
             1 => Exception::TLBModification,
@@ -92,7 +92,7 @@ impl Exception {
 
 impl CP0Cause {
     #[inline]
-    pub fn bits(&self) -> usize {
+    pub fn bits(&self) -> u32 {
         self.bits
     }
 
@@ -103,7 +103,7 @@ impl CP0Cause {
     }
 
     #[inline]
-    pub fn pending_interrupt(&self) -> usize {
+    pub fn pending_interrupt(&self) -> u32 {
         // IP = cause_reg[15..11, 9..8]
         let soft_int = (self.bits >> 8) & 0b11;
         let hard_int = (self.bits >> 11) & 0b11111;
