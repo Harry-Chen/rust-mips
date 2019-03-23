@@ -7,6 +7,10 @@ pub struct CP0Cause {
     bits: u32
 }
 
+impl CP0RegisterTrait for CP0Cause {
+    const REG_ID: u8 = 13;
+}
+
 #[derive(Clone, Copy, Debug)]
 pub enum Exception {
     Interrupt,
@@ -92,11 +96,6 @@ impl Exception {
 
 impl CP0Cause {
     #[inline]
-    pub fn bits(&self) -> u32 {
-        self.bits
-    }
-
-    #[inline]
     pub fn cause(&self) -> Exception {
         // exc_code = cause_reg[6..2]
         Exception::from((self.bits >> 2) & 0x1f)
@@ -119,23 +118,5 @@ impl CP0Cause {
         self.bits = (self.bits & !(0b11 << 8)) | (mark << 8);
     }
 
-    pub unsafe fn read() -> Self {
-        Self { bits: cp0_register_read::<Self>() }
-    }
-
-    pub unsafe fn write(&mut self) {
-        cp0_register_write::<Self>(self.bits);
-    }
-}
-
-pub unsafe fn read_cp0_cause() -> u32 {
-    cp0_register_read::<CP0Cause>()
-}
-
-pub unsafe fn write_cp0_cause(val: u32) {
-    cp0_register_write::<CP0Cause>(val);
-}
-
-impl CP0Register for CP0Cause {
-    const REG_ID : u8 = 13;
+    generate_register_info!();
 }

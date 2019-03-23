@@ -1,3 +1,5 @@
 
-pub mod cp0_traits;
+#[macro_use]
+mod cp0_traits;
+
 pub mod cp0_cause;
