@@ -24,9 +24,9 @@ macro_rules! generate_entry_lo {
         }
 
         impl $name {
-            generate_register_info!();
+            register_basic_operations!();
             register_flags!();
-            register_fleld!(get_pfn, set_pfn, 6, 24);
+            register_field!(get_pfn, set_pfn, 6, 24);
         }
     };
 }
