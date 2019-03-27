@@ -14,7 +14,7 @@ macro_rules! register_basic_operations {
     };
 }
 
-macro_rules! register_rw {
+macro_rules! register_r {
     ($reg_id: expr, $reg_sel: expr) => {
         #[inline]
         unsafe fn __read() -> u32 {
@@ -27,6 +27,15 @@ macro_rules! register_rw {
         }
 
         #[inline]
+        pub fn read_u32() -> u32 {
+            unsafe { __read() }
+        }
+    };
+}
+
+macro_rules! register_w {
+    ($reg_id: expr, $reg_sel: expr) => {
+        #[inline]
         unsafe fn __write(reg: u32) {
             asm!("mtc0 $0, $$$1, $2"
                  :
@@ -37,14 +46,16 @@ macro_rules! register_rw {
         }
 
         #[inline]
-        pub fn read_u32() -> u32 {
-            unsafe { __read() }
-        }
-
-        #[inline]
         pub fn write_u32(reg: u32) {
             unsafe { __write(reg); }
         }
+    };
+}
+
+macro_rules! register_rw {
+    ($reg_id: expr, $reg_sel: expr) => {
+        register_r!($reg_id, $reg_sel);
+        register_w!($reg_id, $reg_sel);
     };
 }
 
