@@ -15,16 +15,12 @@ macro_rules! generate_entry_lo {
     ($name: ident, $id: expr) => {
         #[derive(Clone, Copy, Debug)]
         pub struct $name {
-            bits: u32,
+            pub bits: u32,
         }
 
         impl CP0EntryLoFlags for $name { }
-        impl CP0RegisterTrait for $name {
-            const REG_ID : u8 = $id;
-        }
 
         impl $name {
-            register_basic_operations!();
             register_flags!();
             register_field!(get_pfn, set_pfn, 6, 24);
         }

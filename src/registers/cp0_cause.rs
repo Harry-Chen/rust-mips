@@ -4,12 +4,28 @@ use crate::registers::cp0_general::*;
 
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Cause {
-    bits: u32
+    pub bits: u32
 }
 
-impl CP0RegisterTrait for CP0Cause {
-    const REG_ID: u8 = 13;
-}
+register_rw!(13, 0);
+register_struct_rw!(CP0Cause);
+register_set_reset_bit!(
+    set_soft_int0,
+    reset_soft_int0,
+    8
+);
+
+register_set_reset_bit!(
+    set_soft_int1,
+    reset_soft_int1,
+    9
+);
+
+register_set_reset_bit!(
+    set_iv,
+    reset_iv,
+    23
+);
 
 #[derive(Clone, Copy, Debug)]
 pub enum Exception {
@@ -108,15 +124,4 @@ impl CP0Cause {
         let hard_int = (self.bits >> 11) & 0b11111;
         soft_int | (hard_int << 2)
     }
-
-    #[inline]
-    pub fn set_software_interrupt(&mut self, soft_int: SoftwareInterrupt) {
-        let mark = match soft_int {
-            SoftwareInterrupt::SoftInt0 => 0b01,
-            SoftwareInterrupt::SoftInt1 => 0b10,
-        };
-        self.bits = (self.bits & !(0b11 << 8)) | (mark << 8);
-    }
-
-    register_basic_operations!();
 }

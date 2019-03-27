@@ -1,10 +1,5 @@
 //! Traits for MIPS CP0 registers
 
-pub trait CP0RegisterTrait {
-    const REG_ID : u8;
-    const REG_SEL : u8 = 0;
-}
-
 macro_rules! register_basic_operations {
     () => {
         #[inline]
@@ -16,36 +11,79 @@ macro_rules! register_basic_operations {
         pub fn set_bits(&mut self, val: u32) {
             self.bits = val;
         }
+    };
+}
 
-        pub unsafe fn read(&mut self) {
+macro_rules! register_rw {
+    ($reg_id: expr, $reg_sel: expr) => {
+        #[inline]
+        unsafe fn __read() -> u32 {
+            let reg: u32;
             asm!("mfc0 $0, $$$1, $2"
-                 : "=r"(self.bits)
-                 : "i"(Self::REG_ID), "i"(Self::REG_SEL)
+                 : "=r"(reg)
+                 : "i"($reg_id), "i"($reg_sel)
             );
+            reg
         }
 
-        pub unsafe fn write(&self) {
+        #[inline]
+        unsafe fn __write(reg: u32) {
             asm!("mtc0 $0, $$$1, $2"
                  :
-                 : "r"(self.bits), "i"(Self::REG_ID), "i"(Self::REG_SEL)
+                 : "r"(reg), "i"($reg_id), "i"($reg_sel)
                  :
                  : "volatile"
             );
         }
+
+        #[inline]
+        pub fn read_u32() -> u32 {
+            unsafe { __read() }
+        }
+
+        #[inline]
+        pub fn write_u32(reg: u32) {
+            unsafe { __write(reg); }
+        }
     };
 }
 
-macro_rules! register_flags {
-    () => {
+macro_rules! register_struct_rw {
+    ($ident: ident) => {
         #[inline]
-        pub fn set_flags(&mut self, flags: u32) {
-            self.bits = self.bits | (flags & Self::FLAG_MASK);
+        pub fn read() -> $ident {
+            $ident { bits: read_u32() }
         }
 
         #[inline]
-        pub fn reset_flags(&mut self, flags: u32) {
-            self.bits = self.bits & !(flags & Self::FLAG_MASK);
+        pub fn write(reg: $ident) {
+            write_u32(reg.bits);
         }
+    };
+}
+
+macro_rules! register_set_bit {
+    ($setter: ident, $bit: expr) => {
+        #[inline]
+        pub fn $setter() {
+            write_u32(read_u32() | (1u32 << $bit));
+        }
+    };
+}
+
+macro_rules! register_reset_bit {
+    ($resetter: ident, $bit: expr) => {
+        #[inline]
+        pub fn $resetter() {
+            write_u32(read_u32() & !(1u32 << $bit));
+        }
+    };
+}
+
+macro_rules! register_set_reset_bit {
+    ($setter: ident, $resetter: ident, $bit: expr) => {
+        register_set_bit!($setter, $bit);
+        register_reset_bit!($resetter, $bit);
     };
 }
 
