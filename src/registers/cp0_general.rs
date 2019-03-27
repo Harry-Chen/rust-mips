@@ -1,19 +1,5 @@
 //! Traits for MIPS CP0 registers
 
-macro_rules! register_basic_operations {
-    () => {
-        #[inline]
-        pub fn bits(&self) -> u32 {
-            self.bits
-        }
-
-        #[inline]
-        pub fn set_bits(&mut self, val: u32) {
-            self.bits = val;
-        }
-    };
-}
-
 macro_rules! register_r {
     ($reg_id: expr, $reg_sel: expr) => {
         #[inline]

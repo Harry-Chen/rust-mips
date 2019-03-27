@@ -1,7 +1,5 @@
 //! MIPS CP0 Cause register
 
-use crate::registers::cp0_general::*;
-
 #[derive(Clone, Copy, Debug)]
 pub struct CP0Cause {
     pub bits: u32
