@@ -1,3 +1,3 @@
 //! MIPS CP0 ErrorEPC register
 
-register_r!(30, 0);
+register_rw!(30, 0);

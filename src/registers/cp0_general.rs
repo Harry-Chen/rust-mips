@@ -95,3 +95,57 @@ macro_rules! register_field {
         }
     };
 }
+
+
+macro_rules! register_flags {
+    () => {
+        #[inline]
+        pub fn set_flags(&mut self, flags: u32) {
+            self.bits = self.bits | (flags & Self::FLAG_MASK);
+        }
+
+        #[inline]
+        pub fn reset_flags(&mut self, flags: u32) {
+            self.bits = self.bits & !(flags & Self::FLAG_MASK);
+        }
+    };
+}
+
+macro_rules! register_struct_block_setter {
+    ($setter: ident, $val: expr, $mask: expr) => {
+        #[inline]
+        pub fn $setter(&mut self) {
+            self.bits = (self.bits & !$mask) | $val;
+        }
+    };
+}
+
+macro_rules! register_struct_bit_getter {
+    ($getter: ident, $bit: expr) => {
+        #[inline]
+        pub fn $getter(&self) -> bool {
+            ((self.bits >> $bit) & 1) != 0
+        }
+    };
+}
+
+macro_rules! register_struct_bit_setter {
+    ($setter: ident, $resetter: ident, $bit: expr) => {
+        #[inline]
+        pub fn $setter(&mut self) {
+            self.bits = self.bits | (1 << $bit);
+        }
+        
+        #[inline]
+        pub fn $resetter(&mut self) {
+            self.bits = self.bits & !(1 << $bit);
+        }
+    };
+}
+
+macro_rules! register_struct_bit_accessor {
+    ($getter: ident, $setter: ident, $resetter: ident, $bit: expr) => {
+        register_struct_bit_getter!($getter, $bit);
+        register_struct_bit_setter!($setter, $resetter, $bit);
+    };
+}
