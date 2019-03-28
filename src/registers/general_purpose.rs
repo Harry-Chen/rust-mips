@@ -47,7 +47,7 @@ define_gpr!(sp, 29);
 define_gpr!(fp, 30);
 define_gpr!(ra, 31);
 
-
+#[inline]
 pub fn read<R>() -> u32 
 where R: GeneralPurposeRegister {
     let value: u32;
@@ -61,6 +61,7 @@ where R: GeneralPurposeRegister {
     value
 }
 
+#[inline]
 pub fn write<R>(value: u32)
 where R: GeneralPurposeRegister {
     unsafe {
@@ -70,4 +71,3 @@ where R: GeneralPurposeRegister {
         );
     }
 }
-
