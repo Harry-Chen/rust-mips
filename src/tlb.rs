@@ -1,7 +1,9 @@
+//! read & write TLB items
 
 use crate::registers::cp0;
 use crate::instructions;
 
+/// refers to one TLB entry
 pub struct TLBEntry {
     pub entry_lo0: cp0::entry_lo::EntryLo,
     pub entry_lo1: cp0::entry_lo::EntryLo,

@@ -2,7 +2,7 @@
 
 [![Build status](https://travis-ci.org/Harry-Chen/rust-mips.svg?branch=master)](https://travis-ci.org/Harry-Chen/rust-mips)
 
-Rust library for low-level abstraction of MIPS processors
+Rust library for low-level abstraction of MIPS32 processors
 
 ## License
 
@@ -23,4 +23,4 @@ Use `make clean` to remove all build outputs, `make dist-clean` to also remove c
 
 ## Documentation
 
-TBD
+See [doc.rs/rust-mips](<https://docs.rs/crate/rust-mips/>) for documentation, or run `cargo doc` to generate it locally.

@@ -1,18 +1,31 @@
-//! General purpose MIPS registers
+//! provides access to general purpose registers (GPRs)
 
+/// refers to a GPR
 pub trait GeneralPurposeRegister {
     const ID: u32;
 }
 
+
 macro_rules! define_gpr {
-    ($name: ident, $id: expr) => {
+    ($name: ident, $id: expr, $doc_name: expr, $doc_id: expr) => {
         #[allow(non_camel_case_types)]
+        #[doc = "register"]
+        #[doc = $doc_id]
+        #[doc = "("]
+        #[doc = $doc_name]
+        #[doc = ")"]
         pub struct $name {}
         impl GeneralPurposeRegister for $name {
             const ID: u32 = $id;
         }
     };
+
+    // call itself recursively to generate correct documentation
+    ($name: ident, $id: expr) => {
+        define_gpr!($name, $id, stringify!($name), stringify!($id));
+    };
 }
+
 
 define_gpr!(zero, 0);
 define_gpr!(at, 1);
@@ -49,6 +62,11 @@ define_gpr!(s8, 30);
 define_gpr!(fp, 30);
 define_gpr!(ra, 31);
 
+
+/// read from a GPR
+/// ```rust
+/// let value = read::<a0>();
+/// ```
 #[inline]
 pub fn read<R>() -> u32 
 where R: GeneralPurposeRegister {
@@ -63,6 +81,10 @@ where R: GeneralPurposeRegister {
     value
 }
 
+/// write to a GPR
+/// ```rust
+/// write::<s0>(42);
+/// ```
 #[inline]
 pub fn write<R>(value: u32)
 where R: GeneralPurposeRegister {
