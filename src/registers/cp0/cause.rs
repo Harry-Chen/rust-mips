@@ -1,12 +1,12 @@
-//! MIPS CP0 Cause register
+//! MIPS  Cause register
 
 #[derive(Clone, Copy, Debug)]
-pub struct CP0Cause {
+pub struct Cause {
     pub bits: u32
 }
 
 register_rw!(13, 0);
-register_struct_rw!(CP0Cause);
+register_struct_rw!(Cause);
 register_set_reset_bit!(
     set_soft_int0,
     reset_soft_int0,
@@ -108,7 +108,7 @@ impl Exception {
     }
 }
 
-impl CP0Cause {
+impl Cause {
     #[inline]
     pub fn cause(&self) -> Exception {
         // exc_code = cause_reg[6..2]

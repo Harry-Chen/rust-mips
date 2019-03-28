@@ -1,4 +1,4 @@
-//! MIPS CP0 EntryLo register
+//! MIPS  EntryLo register
 
 pub trait Flags {
     const DIRTY:     u32 = 0b000100;
@@ -11,13 +11,13 @@ pub trait Flags {
 }
 
 #[derive(Clone, Copy, Debug)]
-pub struct CP0EntryLo {
+pub struct EntryLo {
     pub bits: u32,
 }
 
-impl Flags for CP0EntryLo { }
+impl Flags for EntryLo { }
 
-impl CP0EntryLo {
+impl EntryLo {
     register_flags!();
     register_field!(get_pfn, set_pfn, 6, 24);
     register_struct_bit_accessor!(
@@ -32,50 +32,50 @@ impl CP0EntryLo {
         set_cacheable, Self::CACHEABLE, Self::CACHE_MASK);
 }
 
-pub mod __cp0_entry_lo0 {
+pub mod __entry_lo0 {
     register_rw!(2, 0);
 }
 
-pub mod __cp0_entry_lo1 {
+pub mod __entry_lo1 {
     register_rw!(3, 0);
 }
 
 #[inline]
 pub fn read0_u32() -> u32 {
-    __cp0_entry_lo0::read_u32()
+    __entry_lo0::read_u32()
 }
 
 #[inline]
 pub fn read1_u32() -> u32 {
-    __cp0_entry_lo1::read_u32()
+    __entry_lo1::read_u32()
 }
 
 #[inline]
 pub fn write0_u32(v: u32) {
-    __cp0_entry_lo0::write_u32(v);
+    __entry_lo0::write_u32(v);
 }
 
 #[inline]
 pub fn write1_u32(v: u32) {
-    __cp0_entry_lo1::write_u32(v);
+    __entry_lo1::write_u32(v);
 }
 
 #[inline]
-pub fn read0() -> CP0EntryLo {
-    CP0EntryLo { bits: read0_u32() }
+pub fn read0() -> EntryLo {
+    EntryLo { bits: read0_u32() }
 }
 
 #[inline]
-pub fn read1() -> CP0EntryLo {
-    CP0EntryLo { bits: read1_u32() }
+pub fn read1() -> EntryLo {
+    EntryLo { bits: read1_u32() }
 }
 
 #[inline]
-pub fn write0(reg: CP0EntryLo) {
+pub fn write0(reg: EntryLo) {
     write0_u32(reg.bits);
 }
 
 #[inline]
-pub fn write1(reg: CP0EntryLo) {
+pub fn write1(reg: EntryLo) {
     write1_u32(reg.bits);
 }

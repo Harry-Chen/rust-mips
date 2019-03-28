@@ -1,4 +1,4 @@
-//! Traits for MIPS CP0 registers
+//! Traits for MIPS  registers
 
 macro_rules! register_r {
     ($reg_id: expr, $reg_sel: expr) => {
@@ -91,7 +91,8 @@ macro_rules! register_field {
         }
 
         pub fn $setter(&mut self, val: u32) {
-            self.bits = (val & ((1 << $size) - 1)) << $offset;
+            let mask: u32 = ((1 << $size) - 1) << $offset;
+            self.bits = (self.bits & !mask) | ((val << $offset) & mask);
         }
     };
 }

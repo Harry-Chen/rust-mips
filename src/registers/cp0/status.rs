@@ -1,7 +1,7 @@
-//! MIPS CP0 Cause register
+//! MIPS  Cause register
 
 register_rw!(12, 0);
-// register_struct_rw!(CP0Status);
+// register_struct_rw!(Status);
 
 /* Interrupt enable */
 register_set_reset_bit!(enable_interrupt, disable_interrupt, 0);
