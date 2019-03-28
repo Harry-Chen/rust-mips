@@ -3,4 +3,5 @@
 
 pub mod instructions;
 pub mod registers;
+pub mod interrupts;
 pub mod tlb;
