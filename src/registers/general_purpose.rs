@@ -44,6 +44,8 @@ define_gpr!(k0, 26);
 define_gpr!(k1, 27);
 define_gpr!(gp, 28);
 define_gpr!(sp, 29);
+// s8 == fp
+define_gpr!(s8, 30);
 define_gpr!(fp, 30);
 define_gpr!(ra, 31);
 
