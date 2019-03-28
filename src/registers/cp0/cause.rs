@@ -1,4 +1,4 @@
-//! MIPS  Cause register
+//! MIPS CP0 Cause register
 
 #[derive(Clone, Copy, Debug)]
 pub struct Cause {

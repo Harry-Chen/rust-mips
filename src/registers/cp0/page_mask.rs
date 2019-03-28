@@ -1,4 +1,4 @@
-//! MIPS  PageMask register
+//! MIPS CP0 PageMask register
 
 #[derive(Clone, Copy, Debug)]
 pub struct PageMask {

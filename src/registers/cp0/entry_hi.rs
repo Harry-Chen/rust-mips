@@ -1,4 +1,4 @@
-//! MIPS  EntryHi register
+//! MIPS CP0 EntryHi register
 
 #[derive(Clone, Copy, Debug)]
 pub struct EntryHi {

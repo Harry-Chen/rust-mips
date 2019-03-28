@@ -1,4 +1,4 @@
-//! MIPS  Cause register
+//! MIPS CP0 Cause register
 
 register_rw!(12, 0);
 // register_struct_rw!(Status);

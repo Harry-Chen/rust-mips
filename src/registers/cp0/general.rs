@@ -1,4 +1,4 @@
-//! Traits for MIPS  registers
+//! Traits for MIPS CP0 registers
 
 macro_rules! register_r {
     ($reg_id: expr, $reg_sel: expr) => {
