@@ -1,6 +1,7 @@
 # rust-mips
 
 [![Build status](https://travis-ci.org/Harry-Chen/rust-mips.svg?branch=master)](https://travis-ci.org/Harry-Chen/rust-mips)
+[![Crate version](https://img.shields.io/crates/v/mips.svg)](https://crates.io/crates/mips)
 
 Rust library for low-level abstraction of MIPS32 processors
 
