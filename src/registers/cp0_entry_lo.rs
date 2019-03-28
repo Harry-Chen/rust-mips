@@ -1,4 +1,4 @@
-//! MIPS CP0 Count register
+//! MIPS CP0 EntryLo register
 
 pub trait Flags {
     const DIRTY:     u32 = 0b000100;

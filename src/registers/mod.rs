@@ -12,3 +12,5 @@ pub mod cp0_status;
 pub mod cp0_count;
 pub mod cp0_compare;
 pub mod cp0_entry_lo;
+pub mod cp0_entry_hi;
+pub mod cp0_page_mask;
