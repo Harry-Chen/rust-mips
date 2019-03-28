@@ -24,4 +24,5 @@ Use `make clean` to remove all build outputs, `make dist-clean` to also remove c
 
 ## Documentation
 
-See [doc.rs/rust-mips](<https://docs.rs/mips>) for documentation, or run `cargo doc` to generate it locally.
+See [doc.rs/mips](https://docs.rs/mips) for documentation, or run `cargo doc` to generate it locally.
+
