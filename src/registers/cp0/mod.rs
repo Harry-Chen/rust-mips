@@ -16,3 +16,4 @@ pub mod entry_lo;
 pub mod entry_hi;
 pub mod page_mask;
 pub mod wired;
+pub mod config;
