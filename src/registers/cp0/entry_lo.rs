@@ -1,21 +1,21 @@
 //! MIPS CP0 EntryLo register
 
-pub trait Flags {
-    const DIRTY:     u32 = 0b000100;
-    const VALID:     u32 = 0b000010;
-    const GLOBAL:    u32 = 0b000001;
-    const UNCACHED:  u32 = 0b010000;
-    const CACHEABLE:  u32 = 0b011000;
-    const FLAG_MASK: u32 = 0b111111;
-    const CACHE_MASK: u32 = 0b111000;
+bitflags! {
+    pub struct Flags : u32 {
+        const DIRTY      = 0b000100;
+        const VALID      = 0b000010;
+        const GLOBAL     = 0b000001;
+        const UNCACHED   = 0b010000;
+        const CACHEABLE  = 0b011000;
+        const FLAG_MASK  = 0b111111;
+        const CACHE_MASK = 0b111000;
+    }
 }
 
 #[derive(Clone, Copy, Debug)]
 pub struct EntryLo {
     pub bits: u32,
 }
-
-impl Flags for EntryLo { }
 
 impl EntryLo {
     register_flags!();
@@ -27,9 +27,9 @@ impl EntryLo {
     register_struct_bit_accessor!(
         global, set_global, reset_global, 0);
     register_struct_block_setter!(
-        set_uncached, Self::UNCACHED, Self::CACHE_MASK);
+        set_uncached, Flags::UNCACHED.bits(), Flags::CACHE_MASK.bits());
     register_struct_block_setter!(
-        set_cacheable, Self::CACHEABLE, Self::CACHE_MASK);
+        set_cacheable, Flags::CACHEABLE.bits(), Flags::CACHE_MASK.bits());
 }
 
 pub mod __entry_lo0 {

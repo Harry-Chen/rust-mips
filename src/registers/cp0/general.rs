@@ -101,13 +101,13 @@ macro_rules! register_field {
 macro_rules! register_flags {
     () => {
         #[inline]
-        pub fn set_flags(&mut self, flags: u32) {
-            self.bits = self.bits | (flags & Self::FLAG_MASK);
+        pub fn set_flags(&mut self, flags: Flags) {
+            self.bits = (self.bits & !Flags::FLAG_MASK.bits()) | (flags & Flags::FLAG_MASK).bits();
         }
 
         #[inline]
-        pub fn reset_flags(&mut self, flags: u32) {
-            self.bits = self.bits & !(flags & Self::FLAG_MASK);
+        pub fn get_flags(&self) -> Flags {
+            Flags { bits: self.bits & Flags::FLAG_MASK.bits() }
         }
     };
 }
