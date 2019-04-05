@@ -11,6 +11,10 @@ pub struct TLBEntry {
     pub page_mask: cp0::page_mask::PageMask
 }
 
+pub fn clear_all_tlb() {
+    clear_tlb(0, cp0::config::mmu_size() - 1);
+}
+
 pub fn clear_tlb(start: u32, end: u32) {
     cp0::entry_lo::write0_u32(0);
     cp0::entry_lo::write1_u32(0);

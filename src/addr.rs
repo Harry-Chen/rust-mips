@@ -7,7 +7,6 @@ pub struct VirtAddr(usize);
 
 impl VirtAddr {
     pub fn new(addr: usize) -> VirtAddr {
-        assert!(addr < 0x8000_0000 || addr > 0xbfff_ffff, "kernel unmapped segments");
         VirtAddr(addr)
     }
 
@@ -82,6 +81,15 @@ impl PhysAddr {
     pub fn to_4k_aligned(&self) -> Self {
         PhysAddr((self.0 >> 12) << 12)
     }
+
+    pub fn in_kernel_unmapped(&self) -> bool {
+        self.0 <= 0x1fff_ffff
+    }
+
+    pub fn to_kernel_unmapped(&self) -> VirtAddr {
+        assert!(self.in_kernel_unmapped(), "not in kernel unmapped segments");
+        VirtAddr(self.0 & 0x8000_0000)
+    }
 }
 
 
@@ -128,6 +136,14 @@ impl Frame {
     #[inline(always)]
     pub fn of_ppn(ppn: usize) -> Self {
         Frame(PhysAddr::new(ppn << 12))
+    }
+
+    pub fn in_kernel_unmapped(&self) -> bool {
+        self.0.in_kernel_unmapped()
+    }
+
+    pub fn to_kernel_unmapped(&self) -> VirtAddr {
+        self.0.to_kernel_unmapped()
     }
 
     pub fn start_address(&self) -> PhysAddr { self.0.clone() }

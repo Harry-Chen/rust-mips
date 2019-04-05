@@ -128,3 +128,7 @@ pub fn read() -> Config {
         config3: __config3::read_u32()
     }
 }
+
+pub fn mmu_size() -> u32 {
+    (__config1::read_u32() >> 25) & 0b111111
+}
