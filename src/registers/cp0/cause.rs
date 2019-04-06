@@ -117,9 +117,9 @@ impl Cause {
 
     #[inline]
     pub fn pending_interrupt(&self) -> u32 {
-        // IP = cause_reg[15..11, 9..8]
+        // IP = cause_reg[15..10, 9..8]
         let soft_int = (self.bits >> 8) & 0b11;
-        let hard_int = (self.bits >> 11) & 0b11111;
+        let hard_int = (self.bits >> 10) & 0b111_111;
         soft_int | (hard_int << 2)
     }
 }
