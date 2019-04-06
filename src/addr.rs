@@ -26,6 +26,10 @@ impl VirtAddr {
         self.0.get_bits(12..32)
     }
 
+    pub fn vpn2(&self) -> usize {
+        self.0.get_bits(13..32)
+    }
+
     pub fn page_offset(&self) -> usize {
         self.0.get_bits(0..12)
     }

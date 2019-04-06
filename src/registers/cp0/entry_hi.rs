@@ -15,8 +15,13 @@ register_struct_rw!(EntryHi);
 
 #[inline]
 pub fn set_entry(vpn2: u32, asid: u32) {
+    write(new_entry(vpn2, asid));
+}
+
+#[inline]
+pub fn new_entry(vpn2: u32, asid: u32) -> EntryHi {
     let mut reg = EntryHi { bits: 0 };
     reg.set_vpn2(vpn2);
     reg.set_asid(asid);
-    write(reg);
+    reg
 }

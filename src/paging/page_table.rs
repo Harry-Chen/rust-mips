@@ -1,4 +1,6 @@
 use crate::addr::*;
+use crate::tlb::*;
+use crate::registers::cp0;
 use crate::registers::cp0::entry_lo::*;
 use core::ops::{Index, IndexMut};
 use core::fmt::{Debug, Formatter, Error};
@@ -12,6 +14,26 @@ impl PageTable {
     pub fn zero(&mut self) {
         for entry in self.entries.iter_mut() {
             entry.set_unused();
+        }
+    }
+
+    pub fn lookup(&self, vaddr: usize) -> TLBEntry {
+        let virt_addr = VirtAddr::new(vaddr);
+        let p1_frame = self.entries[virt_addr.p2_index()].frame();
+        let p1_table: &mut PageTable = 
+            unsafe { p1_frame.to_kernel_unmapped().as_mut() };
+        let p1_odd = p1_table[virt_addr.p1_index() | 1];
+        let p1_even = p1_table[virt_addr.p1_index() & !1];
+        TLBEntry {
+            entry_lo0: p1_even.entrylo(),
+            entry_lo1: p1_odd.entrylo(),
+            entry_hi:  cp0::entry_hi::new_entry(
+                virt_addr.vpn2() as u32,
+                0   // ASID = 0
+            ),
+            page_mask: cp0::page_mask::PageMask {
+                bits: 0  // 4K page
+            },
         }
     }
 }
