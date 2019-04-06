@@ -92,7 +92,7 @@ impl PhysAddr {
 
     pub fn to_kernel_unmapped(&self) -> VirtAddr {
         assert!(self.in_kernel_unmapped(), "not in kernel unmapped segments");
-        VirtAddr(self.0 & 0x8000_0000)
+        VirtAddr(self.0 | 0x8000_0000)
     }
 }
 
