@@ -87,7 +87,7 @@ impl PhysAddr {
     }
 
     pub fn in_kernel_unmapped(&self) -> bool {
-        self.0 <= 0x1fff_ffff
+        (self.0 & 0x7fff_ffff) <= 0x1fff_ffff 
     }
 
     pub fn to_kernel_unmapped(&self) -> VirtAddr {
