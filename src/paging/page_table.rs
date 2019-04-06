@@ -17,14 +17,19 @@ impl PageTable {
         }
     }
 
-    pub fn lookup(&self, vaddr: usize) -> TLBEntry {
+    pub fn lookup(&self, vaddr: usize) -> Result<TLBEntry, ()> {
         let virt_addr = VirtAddr::new(vaddr);
-        let p1_frame = self.entries[virt_addr.p2_index()].frame();
+        let p1_entry = self.entries[virt_addr.p2_index()];
+        if !p1_entry.flags().contains(EF::VALID) {
+            return Err(());
+        }
+
+        let p1_frame = p1_entry.frame();
         let p1_table: &mut PageTable = 
             unsafe { p1_frame.to_kernel_unmapped().as_mut() };
         let p1_odd = p1_table[virt_addr.p1_index() | 1];
         let p1_even = p1_table[virt_addr.p1_index() & !1];
-        TLBEntry {
+        Ok( TLBEntry {
             entry_lo0: p1_even.entrylo(),
             entry_lo1: p1_odd.entrylo(),
             entry_hi:  cp0::entry_hi::new_entry(
@@ -34,7 +39,7 @@ impl PageTable {
             page_mask: cp0::page_mask::PageMask {
                 bits: 0  // 4K page
             },
-        }
+        } )
     }
 }
 
