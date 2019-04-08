@@ -55,7 +55,7 @@ impl MapperFlush {
 
     /// Flush the page from the TLB to ensure that the newest mapping is used.
     pub fn flush(self) {
-        clear_all_tlb();
+        TLBEntry::clear_all();
     }
 
     /// Don't flush the TLB and silence the “must be used” warning.

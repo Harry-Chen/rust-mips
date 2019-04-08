@@ -1,5 +1,7 @@
 //! read & write TLB items
 
+#![allow(deprecated)]
+
 use crate::registers::cp0;
 use crate::instructions;
 
@@ -80,5 +82,5 @@ impl TLBEntry {
     pub fn write_random(self) {
         write_tlb_random(self);
     }
-    
+
 }
