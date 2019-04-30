@@ -1,3 +1,5 @@
+//! abstraction for page table
+
 use crate::addr::*;
 use crate::tlb::*;
 use crate::registers::cp0;
@@ -71,11 +73,13 @@ const ENTRY_COUNT: usize = 1 << 10;
 
 bitflags! {
     /// Possible flags for a page table entry.
+    /// ```
     /// VALID      = cp0.entry_lo.valid
     /// WRITABLE   = cp0.entry_lo.dirty
     /// GLOBAL     = cp0.entry_lo.global
     /// CACHEABLE  = cp0.entry_lo.cacheable/uncached
     /// ACCESSED and DIRTY are set by software and used in swap algorithms.
+    /// ```
     pub struct PageTableFlags: usize {
         const GLOBAL =      1 << 0;
         const VALID =       1 << 1;
@@ -93,11 +97,11 @@ bitflags! {
 pub type EF = PageTableFlags;
 
 /// Page table entry
-///
+/// ```
 /// +----------------+-------------------+
 /// | PPN ( 24bits ) | flags ( 10 bits ) |
 /// +----------------+-------------------+
-///
+/// ```
 #[derive(Copy, Clone)]
 pub struct PageTableEntry(usize);
 
