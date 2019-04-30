@@ -12,7 +12,12 @@ pub struct TLBEntry {
 }
 
 pub fn clear_all_tlb() {
-    clear_tlb(0, cp0::config::mmu_size());
+    let mmu_size = cp0::config::mmu_size();
+    if mmu_size != 0 {
+        clear_tlb(0, mmu_size);
+    } else {
+        clear_tlb(0, 63);
+    }
 }
 
 pub fn clear_tlb(start: u32, end: u32) {
