@@ -1,7 +1,7 @@
 //! multi-level page table implementation
 
 use super::frame_alloc::*;
-use super::page_table::{*, PageTableFlags as F};
+use super::page_table::{PageTableFlags as F, *};
 use crate::addr::*;
 use crate::tlb::*;
 
@@ -10,7 +10,13 @@ pub trait Mapper {
     ///
     /// This function might need additional physical frames to create new page tables. These
     /// frames are allocated from the `allocator` argument. At most three frames are required.
-    fn map_to(&mut self, page: Page, frame: Frame, flags: PageTableFlags, allocator: &mut impl FrameAllocator) -> Result<MapperFlush, MapToError>;
+    fn map_to(
+        &mut self,
+        page: Page,
+        frame: Frame,
+        flags: PageTableFlags,
+        allocator: &mut impl FrameAllocator,
+    ) -> Result<MapperFlush, MapToError>;
 
     /// Removes a mapping from the page table and returns the frame that used to be mapped.
     ///
@@ -21,7 +27,11 @@ pub trait Mapper {
     fn ref_entry(&mut self, page: Page) -> Result<&mut PageTableEntry, FlagUpdateError>;
 
     /// Updates the flags of an existing mapping.
-    fn update_flags(&mut self, page: Page, flags: PageTableFlags) -> Result<MapperFlush, FlagUpdateError> {
+    fn update_flags(
+        &mut self,
+        page: Page,
+        flags: PageTableFlags,
+    ) -> Result<MapperFlush, FlagUpdateError> {
         self.ref_entry(page).map(|e| {
             *e.flags_mut() = flags;
             MapperFlush::new(page)
@@ -31,14 +41,24 @@ pub trait Mapper {
     /// Return the frame that the specified page is mapped to.
     fn translate_page(&mut self, page: Page) -> Option<Frame> {
         match self.ref_entry(page) {
-            Ok(e) => if e.is_unused() { None } else { Some(e.frame()) },
+            Ok(e) => {
+                if e.is_unused() {
+                    None
+                } else {
+                    Some(e.frame())
+                }
+            }
             Err(_) => None,
         }
     }
 
     /// Maps the given frame to the virtual page with the same address.
-    fn identity_map(&mut self, frame: Frame, flags: PageTableFlags, allocator: &mut impl FrameAllocator) -> Result<MapperFlush, MapToError>
-    {
+    fn identity_map(
+        &mut self,
+        frame: Frame,
+        flags: PageTableFlags,
+        allocator: &mut impl FrameAllocator,
+    ) -> Result<MapperFlush, MapToError> {
         let page = Page::of_addr(VirtAddr::new(frame.start_address().as_usize()));
         self.map_to(page, frame, flags, allocator)
     }
@@ -101,32 +121,36 @@ pub struct TwoLevelPageTable<'a> {
 
 impl<'a> TwoLevelPageTable<'a> {
     pub fn new(table: &'a mut PageTable) -> Self {
-        TwoLevelPageTable {
-            root_table: table
-        }
+        TwoLevelPageTable { root_table: table }
     }
 
-    fn create_p1_if_not_exist(&mut self, p2_index: usize, allocator: &mut impl FrameAllocator) -> Result<&mut PageTable, MapToError> {
+    fn create_p1_if_not_exist(
+        &mut self,
+        p2_index: usize,
+        allocator: &mut impl FrameAllocator,
+    ) -> Result<&mut PageTable, MapToError> {
         if self.root_table[p2_index].is_unused() {
             let frame = allocator.alloc().ok_or(MapToError::FrameAllocationFailed)?;
-            self.root_table[p2_index].set(frame.clone(), F::VALID);
-            let p1_table: &mut PageTable = 
-                unsafe { frame.to_kernel_unmapped().as_mut() };
+            self.root_table[p2_index].set(frame, F::VALID);
+            let p1_table: &mut PageTable = unsafe { frame.to_kernel_unmapped().as_mut() };
             p1_table.zero();
             Ok(p1_table)
         } else {
             let frame = self.root_table[p2_index].frame();
-            let p1_table: &mut PageTable = 
-                unsafe { frame.to_kernel_unmapped().as_mut() };
+            let p1_table: &mut PageTable = unsafe { frame.to_kernel_unmapped().as_mut() };
             Ok(p1_table)
         }
     }
 }
 
 impl<'a> Mapper for TwoLevelPageTable<'a> {
-    fn map_to(&mut self, page: Page, frame: Frame, flags: PageTableFlags, allocator: &mut impl FrameAllocator)
-        -> Result<MapperFlush, MapToError>
-    {
+    fn map_to(
+        &mut self,
+        page: Page,
+        frame: Frame,
+        flags: PageTableFlags,
+        allocator: &mut impl FrameAllocator,
+    ) -> Result<MapperFlush, MapToError> {
         let p1_table = self.create_p1_if_not_exist(page.p2_index(), allocator)?;
         if !p1_table[page.p1_index()].is_unused() {
             return Err(MapToError::PageAlreadyMapped);
@@ -140,8 +164,7 @@ impl<'a> Mapper for TwoLevelPageTable<'a> {
             return Err(UnmapError::PageNotMapped);
         }
         let p1_frame = self.root_table[page.p2_index()].frame();
-        let p1_table: &mut PageTable = 
-            unsafe { p1_frame.to_kernel_unmapped().as_mut() };
+        let p1_table: &mut PageTable = unsafe { p1_frame.to_kernel_unmapped().as_mut() };
         let p1_entry = &mut p1_table[page.p1_index()];
         if !p1_entry.flags().contains(F::VALID) {
             return Err(UnmapError::PageNotMapped);
@@ -156,8 +179,7 @@ impl<'a> Mapper for TwoLevelPageTable<'a> {
             return Err(FlagUpdateError::PageNotMapped);
         }
         let p1_frame = self.root_table[page.p2_index()].frame();
-        let p1_table: &mut PageTable = 
-            unsafe { p1_frame.to_kernel_unmapped().as_mut() };
+        let p1_table: &mut PageTable = unsafe { p1_frame.to_kernel_unmapped().as_mut() };
         Ok(&mut p1_table[page.p1_index()])
     }
 }

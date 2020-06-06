@@ -11,7 +11,7 @@ pub struct Config {
 #[derive(Clone, Copy, Debug)]
 pub enum EndianMode {
     LittleEndian,
-    BigEndian
+    BigEndian,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -20,7 +20,7 @@ pub enum MMUType {
     StandardTLB,
     StandardBAT,
     StandardFixed,
-    Unknown
+    Unknown,
 }
 
 impl Config {
@@ -38,7 +38,7 @@ impl Config {
             1 => MMUType::StandardTLB,
             2 => MMUType::StandardBAT,
             3 => MMUType::StandardFixed,
-            _ => MMUType::Unknown
+            _ => MMUType::Unknown,
         }
     }
 
@@ -111,21 +111,29 @@ impl Config {
     }
 
     pub fn has_fpu(&self) -> bool {
-        ((self.config1 >> 0) & 1) == 1
+        (self.config1 & 1) == 1
     }
 }
 
-pub mod __config0 { register_r!(16, 0); }
-pub mod __config1 { register_r!(16, 1); }
-pub mod __config2 { register_r!(16, 2); }
-pub mod __config3 { register_r!(16, 3); }
+pub mod __config0 {
+    register_r!(16, 0);
+}
+pub mod __config1 {
+    register_r!(16, 1);
+}
+pub mod __config2 {
+    register_r!(16, 2);
+}
+pub mod __config3 {
+    register_r!(16, 3);
+}
 
 pub fn read() -> Config {
     Config {
         config0: __config0::read_u32(),
         config1: __config1::read_u32(),
         config2: __config2::read_u32(),
-        config3: __config3::read_u32()
+        config3: __config3::read_u32(),
     }
 }
 

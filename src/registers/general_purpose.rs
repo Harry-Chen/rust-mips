@@ -5,7 +5,6 @@ pub trait GeneralPurposeRegister {
     const ID: u32;
 }
 
-
 macro_rules! define_gpr {
     ($name: ident, $id: expr, $doc_name: expr, $doc_id: expr) => {
         #[allow(non_camel_case_types)]
@@ -25,7 +24,6 @@ macro_rules! define_gpr {
         define_gpr!($name, $id, stringify!($name), stringify!($id));
     };
 }
-
 
 define_gpr!(zero, 0);
 define_gpr!(at, 1);
@@ -62,17 +60,18 @@ define_gpr!(s8, 30);
 define_gpr!(fp, 30);
 define_gpr!(ra, 31);
 
-
 /// read from a GPR
 /// ```rust
 /// let value = read::<a0>();
 /// ```
 #[inline]
-pub fn read<R>() -> u32 
-where R: GeneralPurposeRegister {
+pub fn read<R>() -> u32
+where
+    R: GeneralPurposeRegister,
+{
     let value: u32;
     unsafe {
-        asm!("ori $0, $$$1, 0"
+        llvm_asm!("ori $0, $$$1, 0"
             : "=r"(value)
             : "i"(R::ID)
             :: "volatile"
@@ -87,9 +86,11 @@ where R: GeneralPurposeRegister {
 /// ```
 #[inline]
 pub fn write<R>(value: u32)
-where R: GeneralPurposeRegister {
+where
+    R: GeneralPurposeRegister,
+{
     unsafe {
-        asm!("ori $$$1, $0, 0"
+        llvm_asm!("ori $$$1, $0, 0"
             :: "r"(value), "i"(R::ID)
             :: "volatile"
         );

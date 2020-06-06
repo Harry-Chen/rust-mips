@@ -1,11 +1,11 @@
 //! abstraction for page table
 
 use crate::addr::*;
-use crate::tlb::*;
 use crate::registers::cp0;
 use crate::registers::cp0::entry_lo::*;
+use crate::tlb::*;
+use core::fmt::{Debug, Error, Formatter};
 use core::ops::{Index, IndexMut};
-use core::fmt::{Debug, Formatter, Error};
 
 pub struct PageTable {
     entries: [PageTableEntry; ENTRY_COUNT],
@@ -27,21 +27,20 @@ impl PageTable {
         }
 
         let p1_frame = p1_entry.frame();
-        let p1_table: &mut PageTable = 
-            unsafe { p1_frame.to_kernel_unmapped().as_mut() };
+        let p1_table: &mut PageTable = unsafe { p1_frame.to_kernel_unmapped().as_mut() };
         let p1_odd = p1_table[virt_addr.p1_index() | 1];
         let p1_even = p1_table[virt_addr.p1_index() & !1];
-        Ok( TLBEntry {
+        Ok(TLBEntry {
             entry_lo0: p1_even.entrylo(),
             entry_lo1: p1_odd.entrylo(),
-            entry_hi:  cp0::entry_hi::new_entry(
+            entry_hi: cp0::entry_hi::new_entry(
                 virt_addr.vpn2() as u32,
-                0   // ASID = 0
+                0, // ASID = 0
             ),
             page_mask: cp0::page_mask::PageMask {
-                bits: 0  // 4K page
+                bits: 0, // 4K page
             },
-        } )
+        })
     }
 }
 
@@ -62,8 +61,7 @@ impl IndexMut<usize> for PageTable {
 impl Debug for PageTable {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         f.debug_map()
-            .entries(self.entries.iter().enumerate()
-                .filter(|p| !p.1.is_unused()))
+            .entries(self.entries.iter().enumerate().filter(|p| !p.1.is_unused()))
             .finish()
     }
 }
@@ -126,7 +124,7 @@ impl PageTableEntry {
     }
     pub fn entrylo(&self) -> EntryLo {
         let mut entry = EntryLo {
-            bits: (self.0 & 0b111) as u32
+            bits: (self.0 & 0b111) as u32,
         };
 
         if self.flags().contains(EF::CACHEABLE) {

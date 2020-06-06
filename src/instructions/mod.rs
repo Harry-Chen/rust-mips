@@ -7,7 +7,7 @@ macro_rules! define_instruction {
         #[doc = $inst]
         #[doc = "` instruction"]
         pub unsafe fn $fun() {
-            asm!($inst : : : : "volatile");
+            llvm_asm!($inst : : : : "volatile");
         }
     };
 
