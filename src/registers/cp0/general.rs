@@ -97,7 +97,6 @@ macro_rules! register_field {
     };
 }
 
-
 macro_rules! register_flags {
     () => {
         #[inline]
@@ -107,7 +106,9 @@ macro_rules! register_flags {
 
         #[inline]
         pub fn get_flags(&self) -> Flags {
-            Flags { bits: self.bits & Flags::FLAG_MASK.bits() }
+            Flags {
+                bits: self.bits & Flags::FLAG_MASK.bits(),
+            }
         }
     };
 }
@@ -136,7 +137,7 @@ macro_rules! register_struct_bit_setter {
         pub fn $setter(&mut self) {
             self.bits = self.bits | (1 << $bit);
         }
-        
+
         #[inline]
         pub fn $resetter(&mut self) {
             self.bits = self.bits & !(1 << $bit);

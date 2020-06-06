@@ -2,28 +2,16 @@
 
 #[derive(Clone, Copy, Debug)]
 pub struct Cause {
-    pub bits: u32
+    pub bits: u32,
 }
 
 register_rw!(13, 0);
 register_struct_rw!(Cause);
-register_set_reset_bit!(
-    set_soft_int0,
-    reset_soft_int0,
-    8
-);
+register_set_reset_bit!(set_soft_int0, reset_soft_int0, 8);
 
-register_set_reset_bit!(
-    set_soft_int1,
-    reset_soft_int1,
-    9
-);
+register_set_reset_bit!(set_soft_int1, reset_soft_int1, 9);
 
-register_set_reset_bit!(
-    set_iv,
-    reset_iv,
-    23
-);
+register_set_reset_bit!(set_iv, reset_iv, 23);
 
 #[derive(Clone, Copy, Debug)]
 pub enum Exception {
@@ -59,13 +47,13 @@ pub enum Exception {
     Reserved4,
     CacheError,
     Reserved5,
-    Unknown
+    Unknown,
 }
 
 #[derive(Clone, Copy, Debug)]
 pub enum SoftwareInterrupt {
     SoftInt0,
-    SoftInt1
+    SoftInt1,
 }
 
 impl Exception {

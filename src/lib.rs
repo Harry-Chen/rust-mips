@@ -8,9 +8,9 @@
 #[macro_use]
 extern crate bitflags;
 
-pub mod instructions;
-pub mod registers;
-pub mod interrupts;
-pub mod tlb;
 pub mod addr;
+pub mod instructions;
+pub mod interrupts;
 pub mod paging;
+pub mod registers;
+pub mod tlb;

@@ -20,16 +20,19 @@ pub struct EntryLo {
 impl EntryLo {
     register_flags!();
     register_field!(get_pfn, set_pfn, 6, 24);
-    register_struct_bit_accessor!(
-        dirty, set_dirty, reset_dirty, 2);
-    register_struct_bit_accessor!(
-        valid, set_valid, reset_valid, 1);
-    register_struct_bit_accessor!(
-        global, set_global, reset_global, 0);
+    register_struct_bit_accessor!(dirty, set_dirty, reset_dirty, 2);
+    register_struct_bit_accessor!(valid, set_valid, reset_valid, 1);
+    register_struct_bit_accessor!(global, set_global, reset_global, 0);
     register_struct_block_setter!(
-        set_uncached, Flags::UNCACHED.bits(), Flags::CACHE_MASK.bits());
+        set_uncached,
+        Flags::UNCACHED.bits(),
+        Flags::CACHE_MASK.bits()
+    );
     register_struct_block_setter!(
-        set_cacheable, Flags::CACHEABLE.bits(), Flags::CACHE_MASK.bits());
+        set_cacheable,
+        Flags::CACHEABLE.bits(),
+        Flags::CACHE_MASK.bits()
+    );
 }
 
 pub mod __entry_lo0 {
