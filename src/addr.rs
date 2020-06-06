@@ -105,7 +105,7 @@ impl Page {
     }
 
     pub fn start_address(&self) -> VirtAddr {
-        self.0.clone()
+        self.0
     }
 
     pub fn p2_index(&self) -> usize {
@@ -150,7 +150,7 @@ impl Frame {
     }
 
     pub fn start_address(&self) -> PhysAddr {
-        self.0.clone()
+        self.0
     }
 
     pub fn p2_index(&self) -> usize {

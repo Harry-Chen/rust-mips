@@ -135,12 +135,12 @@ macro_rules! register_struct_bit_setter {
     ($setter: ident, $resetter: ident, $bit: expr) => {
         #[inline]
         pub fn $setter(&mut self) {
-            self.bits = self.bits | (1 << $bit);
+            self.bits |= 1 << $bit;
         }
 
         #[inline]
         pub fn $resetter(&mut self) {
-            self.bits = self.bits & !(1 << $bit);
+            self.bits &= !(1 << $bit);
         }
     };
 }

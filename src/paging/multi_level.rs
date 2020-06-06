@@ -131,7 +131,7 @@ impl<'a> TwoLevelPageTable<'a> {
     ) -> Result<&mut PageTable, MapToError> {
         if self.root_table[p2_index].is_unused() {
             let frame = allocator.alloc().ok_or(MapToError::FrameAllocationFailed)?;
-            self.root_table[p2_index].set(frame.clone(), F::VALID);
+            self.root_table[p2_index].set(frame, F::VALID);
             let p1_table: &mut PageTable = unsafe { frame.to_kernel_unmapped().as_mut() };
             p1_table.zero();
             Ok(p1_table)

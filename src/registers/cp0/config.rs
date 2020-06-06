@@ -111,7 +111,7 @@ impl Config {
     }
 
     pub fn has_fpu(&self) -> bool {
-        ((self.config1 >> 0) & 1) == 1
+        (self.config1 & 1) == 1
     }
 }
 
