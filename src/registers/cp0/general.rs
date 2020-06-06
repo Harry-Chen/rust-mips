@@ -5,7 +5,7 @@ macro_rules! register_r {
         #[inline]
         unsafe fn __read() -> u32 {
             let reg: u32;
-            asm!("mfc0 $0, $$$1, $2"
+            llvm_asm!("mfc0 $0, $$$1, $2"
                  : "=r"(reg)
                  : "i"($reg_id), "i"($reg_sel)
             );
@@ -23,7 +23,7 @@ macro_rules! register_w {
     ($reg_id: expr, $reg_sel: expr) => {
         #[inline]
         unsafe fn __write(reg: u32) {
-            asm!("mtc0 $0, $$$1, $2"
+            llvm_asm!("mtc0 $0, $$$1, $2"
                  :
                  : "r"(reg), "i"($reg_id), "i"($reg_sel)
                  :

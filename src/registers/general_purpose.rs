@@ -72,7 +72,7 @@ pub fn read<R>() -> u32
 where R: GeneralPurposeRegister {
     let value: u32;
     unsafe {
-        asm!("ori $0, $$$1, 0"
+        llvm_asm!("ori $0, $$$1, 0"
             : "=r"(value)
             : "i"(R::ID)
             :: "volatile"
@@ -89,7 +89,7 @@ where R: GeneralPurposeRegister {
 pub fn write<R>(value: u32)
 where R: GeneralPurposeRegister {
     unsafe {
-        asm!("ori $$$1, $0, 0"
+        llvm_asm!("ori $$$1, $0, 0"
             :: "r"(value), "i"(R::ID)
             :: "volatile"
         );

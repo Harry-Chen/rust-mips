@@ -121,7 +121,6 @@ impl Page {
     pub fn number(&self) -> usize { self.0.page_number() }
 
     pub fn from_page_table_indices(p2_index: usize, p1_index: usize) -> Self {
-        use bit_field::BitField;
         let mut addr: usize = 0;
         addr.set_bits(22..32, p2_index);
         addr.set_bits(12..22, p1_index);

@@ -14,7 +14,7 @@ pub fn enable() {
 
 /// execute a closure in critical section, which means it will not be interrupted  
 /// only works when there is only one processor
-pub fn critical_section(f: &Fn() -> ()) {
+pub fn critical_section(f: impl FnOnce()) {
     disable();
     f();
     enable();

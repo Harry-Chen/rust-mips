@@ -1,9 +1,9 @@
 //! Rust library for low-level abstraction of MIPS32 processors
 
-#![feature(asm)]
+#![feature(llvm_asm)]
 #![no_std]
-#![feature(nll)]
-#![cfg_attr(feature = "inline-asm", feature(asm))]
+#![deny(warnings)]
+#![cfg_attr(feature = "inline-asm", feature(llvm_asm))]
 
 #[macro_use]
 extern crate bitflags;
